@@ -1,0 +1,2 @@
+OMZSH_DIR: /home/{{ ansible_user }}/.oh-my-zsh
+OMZSH_CUSTOM: /home/{{ ansible_user }}/.oh-my-zsh/custom

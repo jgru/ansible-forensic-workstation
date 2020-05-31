@@ -1,0 +1,12 @@
+---
+- name: Install latex
+  package: name={{ item }}
+  state: present
+  become: yes
+  with_items:
+    - texlive-full
+    - python-pygments
+
+- name: Install Xmind
+  apt:
+   deb: https://www.xmind.net/xmind/downloads/XMind-ZEN-for-Linux-amd-64bit-10.0.0-201911260056.deb

@@ -1,0 +1,89 @@
+---
+- name: Check, whether the /usr/bin/emacs exists
+  stat:
+    path: /usr/bin/emacs
+  tags: emacs
+  register: emacs_result
+
+- name: Update apt-cache
+  apt: update_cache=yes
+  tags: packages, python
+  when: emacs_result.stat.exists == False
+
+- name: Install packages needed for compiling
+  apt: pkg={{ item }}
+  with_items:
+    - build-essential
+    - texinfo
+    - libx11-dev
+    - libxpm-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libgif-dev
+    - libtiff-dev
+    - libgtk-3-dev
+    - libncurses-dev
+    - libgnutls28-dev
+  tags: packages, emacs
+  when: emacs_result.stat.exists == False
+
+- name: Extract emacs 26.3 into /tmp
+  unarchive:
+    src: https://ftp.gnu.org/pub/gnu/emacs/emacs-26.3.tar.gz
+    dest: /tmp/
+    remote_src: yes
+  tags: packages, emacs
+
+- name: Configure emacs 26.3
+  shell: ./configure chdir=/tmp/emacs-26.3
+  tags: packages, emacs
+  when: emacs_result.stat.exists == False
+
+- name: Make
+  shell: make chdir=/tmp/emacs-26.3
+  tags: packages, emacs
+  when: emacs_result.stat.exists == False
+
+- name: Install emacs 26.3
+  shell: make install chdir=/tmp/emacs-26.3
+  become: yes
+  become_user: root
+  tags: packages, emacs
+  when: emacs_result.stat.exists == False
+
+- name: Remove tmp files used for emacs installation
+  file: path={{ item }} state=absent
+  with_items:
+    - /tmp/emacs-26.3.tar.gz
+    - /tmp/emacs-26.3
+  tags: packages, emacs
+  when: emacs_result.stat.exists == False
+
+- name: Create .emacs.d directory, if it does not exist
+  file:
+    path: /home/{{ ansible_user }}/.emacs.d
+    state: directory
+    owner: '{{ ansible_user }}'
+    mode: '0755'
+
+- name: Upload init.el
+  copy:
+    src: init.el
+    dest: '/home/{{ ansible_user }}/.emacs.d/init.el'
+
+- name: Install python package of yara
+  pip:
+    name:
+    - rope
+    - elpy
+    - jedi
+    - importmagic
+    - autopep8
+    - flake8
+
+- name: run init file
+  command: 'emacs --script init.el'
+  args:
+    chdir: '/home/{{ ansible_user }}/.emacs.d'  # Change into this directory before running the command
+    removes: 'init.el' # When init.el not exist, don't run command
+

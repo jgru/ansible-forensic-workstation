@@ -1,0 +1,9 @@
+[target]
+172.16.0.172
+#172.16.0.196
+#192.168.178.108
+
+[all:vars]
+ansible_connection=ssh
+ansible_user=user01
+ansible_python_interpreter=/usr/bin/python3

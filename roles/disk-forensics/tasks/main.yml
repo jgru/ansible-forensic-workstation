@@ -1,0 +1,45 @@
+---
+- name: Update and upgrade apt packages
+  become: true
+  apt:
+    upgrade: no
+    update_cache: yes
+
+- name: Install forensics packages
+  apt: pkg={{ item }}
+  state: present
+  become: yes
+  with_items:
+    - afflib-tools
+    - libafflib-dev
+    - libewf-dev
+    - binwalk
+    - dcfldd
+    - dc3dd
+    - ewf-tools
+    - ext4magic
+    - extundelete
+    - guymager
+    - hashrat
+    - kpartx
+    - libfuse-dev
+    - md5deep
+    - missidentify
+    - p7zip-full
+    - plaso
+    - qemu
+    - qemu-utils
+    - rhash
+    - foremost
+    - scalpel
+    - scrounge-ntfs
+    - shed
+    - sleuthkit
+    - libtsk13
+    - libtsk-dev
+    - sqlitebrowser
+    - tableau-parm
+    - testdisk
+    - tofrodos
+    - winregfs
+    - xmount

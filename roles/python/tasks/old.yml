@@ -1,0 +1,77 @@
+---
+- name: Check that the /usr/local/bin/python3 exists
+  stat:
+    path: /usr/local/bin/python3
+  tags: python
+  register: python_result
+
+- name: Update apt-cache
+  apt: update_cache=yes
+  tags: packages, python
+  when: python_result.stat.exists == False
+
+- name: Install packages needed for installing Python
+  apt: pkg={{ item }}
+  with_items:
+    - wget
+    - xz-utils
+    - build-essential
+    - libsqlite3-dev
+    - libreadline-dev
+    - libssl-dev
+    - openssl
+  tags: packages, python
+  when: python_result.stat.exists == False
+
+- name: Extract python 3.8.1 into /tmp
+  unarchive:
+    src: https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tar.xz
+    dest: /tmp/
+    remote_src: yes
+  tags: packages, python
+  when: python_result.stat.exists == False
+
+- name: Configure python 3.8.1
+  shell: ./configure chdir=/tmp/Python-3.8.1
+  tags: packages, python
+  when: python_result.stat.exists == False
+
+- name: Make
+  shell: make chdir=/tmp/Python-3.8.1
+  tags: packages, python
+  when: python_result.stat.exists == False
+
+- name: Install Python 3.8.1
+  shell: make install chdir=/tmp/Python-3.8.1
+  become: yes
+  become_user: root
+  tags: packages, python
+  when: python_result.stat.exists == False
+
+- name: Remove tmp files used for Python 3.8.1 installation
+  file: path={{ item }} state=absent
+  with_items:
+    - /tmp/Python.tar.xz
+    - /tmp/Python-3.8.1
+  tags: packages, python
+  when: python_result.stat.exists == False
+
+- name: Check that the /usr/local/bin/pip3 exists
+  stat:
+    path: /usr/local/bin/pip3
+  tags: python, pip
+  register: pip_result
+
+- name: Install pip3
+  apt:
+    pkg=python3-pip
+  tags: packages, python, pip
+  when: pip_result.stat.exists == False
+
+- name: Install jupyter
+  pip:
+    name:
+      - jupyterlab
+      - notebook
+    executable: pip3
+    tags: jupyter

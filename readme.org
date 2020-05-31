@@ -1,0 +1,13 @@
+* Ansible workstation setup
+
+** How to install
+
+#+begin_src
+pip3 install ansible
+#+end_src
+
+*** How to run
+#+BEGIN_SRC sh
+ansible-playbook -i inventory/hosts playbook/playbook.yml --extra-vars "ansible_sudo_pass=xxxx" -vvv
+ansible-playbook -i inventory/hosts playbook/playbook.yml --ask-become-pass -vvv
+#+END_SRC

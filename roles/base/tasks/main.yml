@@ -1,0 +1,28 @@
+- name: Install base packages
+  apt: name={{ item }} state=present
+  with_items:
+    - locales
+    - build-essential
+    - acl
+    - ntp
+    - htop
+    - git
+    - supervisor
+    - cifs-utils
+  tags:
+    - packages
+
+#- name: Create user
+#  user:
+#    name: user01
+#    state: present
+#    createhome: yes
+#    groups: "sudo"
+#    # Has to be defined in inventory
+#    password: "{{ password }}"
+
+#- name: Create .ssh folder
+#  file:
+#    path: /home/user01/.ssh/
+#    state: directory
+#    mode: 0755

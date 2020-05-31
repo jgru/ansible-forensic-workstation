@@ -1,0 +1,23 @@
+---
+- name: Workstations
+  hosts: all
+  vars:
+      # created with:
+      # python -c 'import crypt; print crypt.crypt("This is my Password", "$1$SomeSalt$")'
+      password: $1$SomeSalt$G6A5OOY.tMhsh1EjEDkOL1
+  become: yes
+  gather_facts: False
+  pre_tasks:
+    - name: Install python for Ansible
+      raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3-minimal python3-pip)
+      changed_when: False
+    - setup: # aka gather_facts
+  roles:
+    - base
+    - python
+    - docker
+    - emacs
+    - shell-environment
+    - disk-forensics
+    - network-forensics
+    #- malware-forensics

@@ -1,0 +1,57 @@
+---
+- name: Ensure old versions of Docker are not installed.
+  package:
+    name:
+     - docker
+     - docker-engine
+    state: absent
+ 
+- name: Update apt-cache
+  apt: update_cache=yes
+  tags: packages, docker
+ 
+- name: Install packages needed for installing docker
+  apt: pkg={{ item }}
+  with_items:
+    - git
+    - apt-transport-https
+    - ca-certificates
+    - wget
+    - software-properties-common
+    - gnupg2
+    - curl
+
+- name: Add Apt signing key from official docker repo
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+ 
+  
+- name: add docker official repository for Debian Buster
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/debian buster stable
+    state: present
+    update_cache: true
+  
+- name: Update apt-cache
+  apt: update_cache=yes
+  tags: packages, docker
+
+- name: actually install docker
+  apt:
+    name: docker-ce
+    state: latest
+
+# Without adding the unprivileged
+# user to the docker group we can't
+# make use of the socket that is activated
+# by systemd. Here we take a list of users that
+# we want to make part of the `docker` group and
+# do it.
+- name: 'add users to docker group'
+  user:
+    name: '{{ ansible_user }}'
+    groups: 'docker'
+    append: 'yes'
+
+
