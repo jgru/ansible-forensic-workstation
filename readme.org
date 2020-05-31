@@ -1,13 +1,37 @@
-* Ansible workstation setup
+* ansible-forensic-workstation
+Given the fact, that I use various, sometimes quickly changing machines I built a Ansible-based playbook with different roles to provide a basic pre-configured environment of the software packages.
+Please note, that this is work in progress for my personal needs.
 
-** How to install
+** Structure of the playbook's files
+Modify ~inventory/hosts~ to match your machines and change the given username.
+Then you might edit ~playbook/playbook.yml~ to include or exclude certain roles. Take a look into each roles ~tasks/main.yml~ file to see, what packages are installed.
 
+#+begin_src
+├── inventory
+├── playbook
+└── roles
+    ├── base
+    ├── disk-forensics
+    ├── docker
+    ├── emacs
+    ├── malware-forensics
+    ├── network-forensics
+    ├── office
+    ├── python
+    └── shell-environment
+#+end_src
+
+** Using the playbook
+
+*** How to install
+Make sure to install ~ansible~ for ~pyhton3~ on the controller side:
 #+begin_src
 pip3 install ansible
 #+end_src
+Furtheron check, that the box to configure is reachable via SSH without a password prompt (use ~ssh-copy-id~ to transfer your keys, if not)
 
-*** How to run
+**** How to run the playbook
+Run the playbook to provision a box
 #+BEGIN_SRC sh
-ansible-playbook -i inventory/hosts playbook/playbook.yml --extra-vars "ansible_sudo_pass=xxxx" -vvv
 ansible-playbook -i inventory/hosts playbook/playbook.yml --ask-become-pass -vvv
 #+END_SRC
