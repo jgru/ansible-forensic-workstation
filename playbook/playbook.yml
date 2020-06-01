@@ -1,10 +1,6 @@
 ---
 - name: Workstations
   hosts: all
-  vars:
-      # created with:
-      # python -c 'import crypt; print crypt.crypt("This is my Password", "$1$SomeSalt$")'
-      password: $1$SomeSalt$G6A5OOY.tMhsh1EjEDkOL1
   become: yes
   gather_facts: False
   pre_tasks:
@@ -20,4 +16,4 @@
     - shell-environment
     - disk-forensics
     - network-forensics
-    #- malware-forensics
+    - malware-forensics

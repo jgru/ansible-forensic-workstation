@@ -1,15 +1,13 @@
 ---
 - name: Update and upgrade apt packages
-  become: true
+  become: yes
   apt:
     upgrade: no
     update_cache: yes
 
 - name: Install forensics packages
-  apt: pkg={{ item }}
-  state: present
-  become: yes
-  with_items:
+  apt:
+    pkg:
     - afflib-tools
     - libafflib-dev
     - libewf-dev
@@ -43,3 +41,4 @@
     - tofrodos
     - winregfs
     - xmount
+  become: yes
