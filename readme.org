@@ -1,6 +1,5 @@
 * ansible-forensic-workstation
-Given the fact, that I use various and sometimes quickly changing machines, I built a Ansible-based playbook with different roles to provide a basic pre-configured environment of the software packages.
-This role ensures being able to act quickly with.
+In order to be able to quickly setup and configure a machine to perform forensic tasks, I built an Ansible-based playbook with different roles to provide a basic pre-configured environment of the software packages to start working.
 
 Please note, that this is work in progress for my personal needs.
 
