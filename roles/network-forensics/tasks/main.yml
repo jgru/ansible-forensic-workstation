@@ -11,3 +11,9 @@
     - netcat
     - wireshark
   become: yes
+
+
+- name: Install python package of unfurl, which dissects and parses ULRs
+  pip:
+    name: unfurl
+    executable: pip3
