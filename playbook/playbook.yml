@@ -1,10 +1,11 @@
 ---
+
 - name: Workstations
   hosts: all
   become: yes
   gather_facts: False
   pre_tasks:
-    - name: Install python for Ansible
+    - name: Install minimal Python for Ansible
       raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3-minimal python3-pip)
       changed_when: False
     - setup: # aka gather_facts
@@ -15,5 +16,7 @@
     - emacs
     - shell-environment
     - disk-forensics
+    - win-artifacts-forensics
+    - autopsy
     - network-forensics
     - malware-forensics

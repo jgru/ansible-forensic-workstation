@@ -1,0 +1,83 @@
+---
+
+- name: Install Autopsy's dependencies
+  apt:
+    pkg:
+       - libafflib-dev
+       - libbfio-dev
+       - libc3p0-java
+       - libewf-dev
+  become: yes
+
+# Add apt signing key for bellsoft packaged OpenJDK with Open JFX
+- name: Add an apt signing key to a specific keyring file
+  apt_key:
+    url: https://download.bell-sw.com/pki/GPG-KEY-bellsoft
+    state: present
+  become: yes
+
+  # Add specified repository into sources list using specified filename.
+- name: Add Bellsoft repo into sources list
+  apt_repository:
+    repo: deb https://apt.bell-sw.com/ stable main
+    state: present
+    filename: bellsoft
+  become: yes
+
+- name: Install Autopsy's Java dependencies
+  apt:
+    pkg:
+       - libpostgresql-jdbc-java
+       - bellsoft-java8-full
+    update_cache: yes
+  become: yes
+
+- name: Update alternatives for java
+  alternatives:
+    name: java
+    path: "/usr/lib/jvm/bellsoft-java8-full-amd64/bin/java"
+    link: "/usr/bin/java"
+
+- name: set java home as environment variable
+  lineinfile:
+    insertafter: EOF
+    path: "/etc/environment"
+    line: "JAVA_HOME=/usr/lib/jvm/bellsoft-java8-full-amd64"
+
+- name: Install Sleuthkit with Java bindings - sleuthkit-java.deb
+  apt:
+    deb: https://github.com/sleuthkit/sleuthkit/releases/download/sleuthkit-{{ sleuthkit_version }}/sleuthkit-java_{{ sleuthkit_version }}-1_amd64.deb
+  become: yes
+
+- name: Unarchive Autopsy-zip-file
+  unarchive:
+    src: https://github.com/sleuthkit/autopsy/releases/download/autopsy-{{ autopsy_version }}/autopsy-{{ autopsy_version }}.zip
+    dest: /opt/
+    remote_src: yes
+
+- name: Ensure Autopsy's directory permission
+  file:
+    path: /opt/autopsy-{{ autopsy_version }}
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Execute setup script unix_setup.sh
+  shell: sh /opt/autopsy-{{ autopsy_version }}/unix_setup.sh
+  args:
+    chdir: /opt/autopsy-{{ autopsy_version }}
+
+- name: Recursively change ownership of a directory
+  file:
+    path: /opt/autopsy-{{ autopsy_version }}
+    state: directory
+    recurse: yes
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+
+- name: Create symbolic link to run autopsy
+  file:
+    src: "/opt/autopsy-{{ autopsy_version }}/bin/autopsy"
+    path: "/usr/local/bin/autopsy"
+    state: link
+    owner: "{{ ansible_user }}"
