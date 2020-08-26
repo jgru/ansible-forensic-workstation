@@ -1,0 +1,34 @@
+---
+- name: Update and upgrade apt packages
+  become: yes
+  apt:
+    upgrade: False
+    update_cache: yes
+
+- name: Install imaging tools
+  apt:
+    pkg:
+       - dc3dd
+       - dcfldd
+       - ewf-tools
+       - gddrescue
+       - guymager
+       - hdparm
+       - tableau-parm  # to to interact with tableau writeblockers
+  become: yes
+
+- name: Install image utils
+  apt:
+    pkg:
+       - afflib-tools
+       - kpartx
+       - libafflib-dev
+       - libewf-dev
+       - libfuse-dev
+       - pciutils
+       - qemu
+       - qemu-utils
+       - smartmontools
+       - usbutils
+       - xmount
+  become: yes

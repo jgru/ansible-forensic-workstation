@@ -1,0 +1,62 @@
+---
+
+- name: Download Gary Kessler's FAT directory parser
+  get_url:
+      url: https://www.garykessler.net/software/fatparser_v2.1.zip
+      dest: /tmp/
+      checksum: sha1:0f155a7193f000697599213b1255b16d91ab82ef
+
+- name: Unarchive fatparser .zip-file
+  unarchive:
+    src: /tmp/fatparser_v2.1.zip
+    dest: /tmp/
+    remote_src: yes
+
+- name: Copy fatparser to /usr/local/bin
+  copy:
+    remote_src: yes
+    src: "/tmp/fatparser.pl"
+    dest: "/usr/local/bin/fatparser"
+    mode: "0775"
+    owner: "{{ ansible_user }}"
+
+
+- name: Download Gary Kessler's MFT parser
+  get_url:
+      url: https://www.garykessler.net/software/mftparser_v2.1.zip
+      dest: /tmp/
+      checksum: sha1:abc17f54c64ae6422c33e1f2d04658a0d2d82b2a
+
+- name: Unarchive mftparser .zip-file
+  unarchive:
+    src: /tmp/mftparser_v2.1.zip
+    dest: /tmp/
+    remote_src: yes
+
+- name: Copy mftparser to /usr/local/bin
+  copy:
+    remote_src: yes
+    src: "/tmp/mftparser.pl"
+    dest: "/usr/local/bin/mftparser"
+    mode: "0775"
+    owner: "{{ ansible_user }}"
+
+- name: Download Gary Kessler's INFO2 parser
+  get_url:
+      url: https://www.garykessler.net/software/info2parser_v1.4.zip
+      dest: /tmp/
+      checksum: sha1:04d1e967a19c0fb30ce75bab3284826c321e93aa
+
+- name: Unarchive info2parser .zip-file
+  unarchive:
+    src: /tmp/info2parser_v1.4.zip
+    dest: /tmp/
+    remote_src: yes
+
+- name: Copy info2parser to /usr/local/bin
+  copy:
+    remote_src: yes
+    src: "/tmp/info2parser.pl"
+    dest: "/usr/local/bin/info2parser"
+    mode: "0775"
+    owner: "{{ ansible_user }}"

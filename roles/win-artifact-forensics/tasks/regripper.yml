@@ -1,0 +1,58 @@
+---
+
+# Install regripper
+- name: Install regripper's Perl dependencies
+  apt:
+    pkg:
+       - cpanminus
+       - make
+       - wget
+       - unzip
+       - git
+  become: yes
+
+- name: Checkout H. Carveys regripper repository; see https://blog.dfir.fi/tools/2020/02/19/install-regripper.html
+  git:
+    repo: https://github.com/keydet89/RegRipper3.0.git
+    dest: "/tmp/RegRipper3.0"
+
+- name: Create regripper directory
+  file:
+    path: "/usr/share/regripper/"
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: "0755"
+
+
+- name: Modify rip.pl to be usable on linux; create temporary file rip-mod.pl
+  script: regripper-mod.sh "/tmp/Regripper3.0"
+
+
+- name: Copy plugin directory to /usr/share/regripper/
+  copy:
+    remote_src: yes
+    src: "/tmp/RegRipper3.0/plugins/"
+    dest: "/usr/share/regripper/"
+    mode: "0755"
+    owner: "{{ ansible_user }}"
+
+
+- name: Copy Base.pm, Key.pm and File.pm to /usr/share/regripper; see https://github.com/teamdfir/sift/issues/447 for infor
+  copy:
+    remote_src: yes
+    src: "{{ item }}"
+    dest: /usr/share/regripper/
+    mode: "0755"
+    owner: "{{ ansible_user }}"
+  loop:
+      - "/tmp/RegRipper3.0/Base.pm"
+      - "/tmp/RegRipper3.0/Key.pm"
+      - "/tmp/RegRipper3.0/File.pm"
+
+
+- name: Create symbolic link to run rip.pl
+  file:
+    src: "/usr/share/regripper/rip.pl"
+    path: "/usr/local/bin/rip"
+    state: link
+    owner: "{{ ansible_user }}"

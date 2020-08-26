@@ -15,8 +15,9 @@
     - docker
     - emacs
     - shell-environment
-    - disk-forensics
-    - win-artifacts-forensics
+    - forensic-imaging
+    - filesystem-forensics
+    - win-artifact-forensics
     - autopsy
     - network-forensics
     - malware-forensics

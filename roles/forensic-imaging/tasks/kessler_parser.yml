@@ -1,0 +1,61 @@
+---
+
+- name: Download Gary Kessler's bsparser
+  get_url:
+      url: https://www.garykessler.net/software/bsparser_v3.1.zip
+      dest: /tmp/
+      checksum: sha1:e210994cebdffbe079f934de1ccd9bb2229a3619
+
+- name: Unarchive BSParser .zip-file
+  unarchive:
+    src: /tmp/bsparser_v3.1.zip
+    dest: /tmp/
+    remote_src: yes
+
+- name: Copy bsparser to /usr/local/bin
+  copy:
+    remote_src: yes
+    src: "/tmp/bsparser.pl"
+    dest: "/usr/local/bin/bsparser"
+    mode: "0775"
+    owner: "{{ ansible_user }}"
+
+- name: Download Gary Kessler's GPT parser
+  get_url:
+      url: https://www.garykessler.net/software/gptparser_v1.4beta.zip
+      dest: /tmp/
+      checksum: sha1:5fe142bf783ffdab829291a91a46c5095fa2403a
+
+- name: Unarchive gpt .zip-file
+  unarchive:
+    src: /tmp/gptparser_v1.4beta.zip
+    dest: /tmp/
+    remote_src: yes
+
+- name: Copy gptparser to /usr/local/bin
+  copy:
+    remote_src: yes
+    src: "/tmp/gptparser.pl"
+    dest: "/usr/local/bin/gptparser"
+    mode: "0775"
+    owner: "{{ ansible_user }}"
+
+- name: Download Gary Kessler's MBR parser
+  get_url:
+      url: https://www.garykessler.net/software/mbrparser_v2.1.zip
+      dest: /tmp/
+      checksum: sha1:b6cee0e7eb35a0a499d1d0e18bd78dd719bcc6af
+
+- name: Unarchive mbrparser .zip-file
+  unarchive:
+    src: /tmp/mbrparser_v2.1.zip
+    dest: /tmp/
+    remote_src: yes
+
+- name: Copy mbrparser to /usr/local/bin
+  copy:
+    remote_src: yes
+    src: "/tmp/mbrparser.pl"
+    dest: "/usr/local/bin/mbrparser"
+    mode: "0775"
+    owner: "{{ ansible_user }}"

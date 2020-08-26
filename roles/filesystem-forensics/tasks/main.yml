@@ -1,34 +1,4 @@
 ---
-- name: Update and upgrade apt packages
-  become: yes
-  apt:
-    upgrade: False
-    update_cache: yes
-
-- name: Install imaging tools
-  apt:
-    pkg:
-       - hdparm
-       - ewf-tools
-       - libewf-dev
-       - dcfldd
-       - dc3dd
-       - guymager
-       - tableau-parm  # to to interact with tableau writeblockers
-  become: yes
-
-- name: Install image utils
-  apt:
-    pkg:
-       - libafflib-dev
-       - afflib-tools
-       - kpartx
-       - qemu
-       - qemu-utils
-       - xmount
-       - libfuse-dev
-       - plaso # timelining
-  become: yes
 
 - name: Install carving and data recovery utilities
   apt:
@@ -42,7 +12,7 @@
        - testdisk  # contains photorec also
   become: yes
 
-- name: Kessler import
+- name: Kessler parser import
   include: kessler_parser.yml
 
 - name: Install hashing utils
@@ -57,6 +27,7 @@
 - name: Install content utils
   apt:
     pkg:
+       - plaso # timelining
        - binwalk
        - p7zip-full  # 7zip
        - shed # Hex viewer
