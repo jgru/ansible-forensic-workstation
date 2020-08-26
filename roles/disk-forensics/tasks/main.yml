@@ -32,6 +32,7 @@
     - scalpel
     - scrounge-ntfs
     - shed
+    - sqlitebrowser
     - sleuthkit
     - libtsk13
     - libtsk-dev
@@ -41,4 +42,6 @@
     - tofrodos
     - winregfs
     - xmount
+    - mpack
+    - pcre2-utils
   become: yes
