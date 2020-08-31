@@ -5,6 +5,8 @@
   become: yes
   with_items:
     - texlive-full
+    - texlive-font-utils
+    - texlive-fonts-extra
     - python-pygments
 
 - name: Install Xmind
