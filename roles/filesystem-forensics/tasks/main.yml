@@ -13,7 +13,7 @@
   become: yes
 
 - name: Kessler parser import
-  include: kessler_parser.yml
+  include: ./kessler_parser.yml
 
 - name: Install hashing utils
   apt:
@@ -27,7 +27,6 @@
 - name: Install content utils
   apt:
     pkg:
-       - plaso # timelining
        - binwalk
        - p7zip-full  # 7zip
        - shed # Hex viewer

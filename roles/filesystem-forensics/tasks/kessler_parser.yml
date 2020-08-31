@@ -19,6 +19,7 @@
     dest: "/usr/local/bin/bsparser"
     mode: "0775"
     owner: "{{ ansible_user }}"
+  become: yes
 
 - name: Download Gary Kessler's GPT parser
   get_url:
@@ -39,6 +40,7 @@
     dest: "/usr/local/bin/gptparser"
     mode: "0775"
     owner: "{{ ansible_user }}"
+  become: yes
 
 - name: Download Gary Kessler's MBR parser
   get_url:
@@ -59,3 +61,4 @@
     dest: "/usr/local/bin/mbrparser"
     mode: "0775"
     owner: "{{ ansible_user }}"
+  become: yes
