@@ -8,6 +8,7 @@
     - texlive-font-utils
     - texlive-fonts-extra
     - python-pygments
+    - biber
 
 - name: Install Xmind
   apt:
