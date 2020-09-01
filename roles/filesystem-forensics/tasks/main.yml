@@ -15,6 +15,12 @@
 - name: Kessler parser import
   include: ./kessler_parser.yml
 
+- name: Install sleuthkit package (Attention, conflicts with autopsy)
+  apt:
+    pkg:
+       - sleuthkit
+  become: yes
+
 - name: Install hashing utils
   apt:
     pkg:

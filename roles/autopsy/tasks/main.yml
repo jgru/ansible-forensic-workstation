@@ -1,4 +1,11 @@
 ---
+- name: Remove sleuthkit and libtsk13 package. (Conflicts with autopsy)
+  apt:
+    name:
+      - sleuthkit
+      - libtsk13
+    state: absent
+  become: yes
 
 - name: Install Autopsy's dependencies
   apt:
@@ -27,7 +34,7 @@
 - name: Install Autopsy's Java dependencies
   apt:
     pkg:
-       - libpostgresql-jdbc-java
+#       - libpostgresql-jdbc-java
        - bellsoft-java8-full
     update_cache: yes
   become: yes
@@ -81,3 +88,5 @@
     path: "/usr/local/bin/autopsy"
     state: link
     owner: "{{ ansible_user }}"
+
+# Incorporate some of those roles/office/tasks/
