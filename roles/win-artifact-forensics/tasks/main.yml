@@ -9,6 +9,7 @@
        - reglookup # read windows registry elements and print them out to stdout as csv
        - vinetto # tool to view thumbs.db
        - libemail-outlook-message-perl # conversion of .msgs
+       - libevtx-utils # conversion of evtx with evtxexport, etc.
   become: yes
 
 - name: Include regripper
