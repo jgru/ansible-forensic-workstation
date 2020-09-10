@@ -1,4 +1,6 @@
 #!/bin/bash
+# See: https://github.com/siftgrab/siftgrab/blob/master/rip.pl2linux.sh for reference
+
 echo $1
 tail -n +2 $1/rip.pl > /usr/local/share/regripper/rip
 perl -pi -e 'tr[\r][]d' /usr/local/share/regripper/rip
