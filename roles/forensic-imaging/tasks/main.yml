@@ -8,6 +8,7 @@
 - name: Install imaging tools
   apt:
     pkg:
+       - pv  # monitor the progress of data through a pipe
        - dc3dd
        - dcfldd
        - ewf-tools
