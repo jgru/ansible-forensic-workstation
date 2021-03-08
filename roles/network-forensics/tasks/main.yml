@@ -5,15 +5,18 @@
     upgrade: no
     update_cache: yes
 
-- name: Install forensics packages
+- name: Install network forensics packages
   apt:
     pkg:
     - netcat
     - wireshark
+    - dsniff
   become: yes
-
 
 - name: Install python package of unfurl, which dissects and parses ULRs
   pip:
     name: unfurl
     executable: pip3
+
+#- name: Install dshell
+#  include: dshell.yml

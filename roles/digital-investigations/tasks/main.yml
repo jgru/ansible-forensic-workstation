@@ -1,0 +1,45 @@
+---
+- name: Update and upgrade apt packages
+  become: yes
+  apt:
+    upgrade: False
+    update_cache: yes
+
+- name: Install imaging tools
+  apt:
+    pkg:
+       - geoip-bin
+       - dnsutils
+       - whois
+       - nmap
+  become: yes
+
+- name: Clone Sherlock repo
+  git:
+    repo: https://github.com/sherlock-project/sherlock.git
+    dest: /usr/local/src/sherlock
+    force: yes
+
+- name: Install requirements for Sherlock
+  pip:
+    requirements: /usr/local/src/sherlock/requirements.txt
+    #virtualenv: /usr/local/src/sherlock/venv/
+
+- name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
+  ansible.builtin.file:
+    path: /usr/local/bin/sherlock
+    state: touch
+    mode: u=rwx,g=rx,o=r
+
+#- name: Make /usr/local/bin/sherlock executable
+#  file: dest=/usr/local/bin/sherlock mode=a+x
+
+- name: add block of lines to a file.
+  blockinfile:
+    path: /usr/local/bin/sherlock
+    block: |
+      #!/bin/bash
+      python3 /usr/local/src/sherlock/sherlock/sherlock.py "$@"
+
+- name: Make /usr/local/bin/sherlock executable
+  file: dest=/usr/local/bin/sherlock mode=a+x

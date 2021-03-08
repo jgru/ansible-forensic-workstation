@@ -1,8 +1,6 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Theme setup
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; No audible beep
 (setq visible-bell t)
 
 (custom-set-variables
@@ -29,10 +27,7 @@
 ;; Enables basic packaging support
 (require 'package)
 ;; (toggle-debug-on-error)
-
-;; Set TLS version to workaround errors on Debian Buster
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-
 ;; Adds org archive
 (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 ;; Adds the Melpa archive to the list of available repositories
@@ -49,10 +44,9 @@
 ;; Installs packages
 ;; define list of packages to install
 (defvar myPackages
-  '(better-defaults                 ;; Set up some better Emacs defaults
+  '(
     elpy                            ;; Emacs Lisp Python Environment
-    ;;ein                             ;; Emacs IPython Notebook (open .ipynb -> C-c C-o)
-				    ;; https://github.com/millejoh/emacs-ipython-notebook
+ 				    ;; https://github.com/millejoh/emacs-ipython-notebook
     org                             ;; org-mode
     flyspell                        ;; spell checking
     auto-complete                   ;; auto-completion feature
@@ -149,11 +143,6 @@
       org-catch-invisible-edits 'error
       )
 
-;; Override keywords for DFIR purposes
-(setq org-todo-keywords
-	  '((sequence "TODO" "IN-PROGRESS(w!)" "|" "DONE")))
-(setq org-time-stamp-formats
-	  '("<%Y-%m-%d %a>" . "<%Y-%m-%d %a %H:%M:%S>"))
 
 (define-key global-map (kbd "C-c c") '(lambda () (interactive) (org-capture nil "t")))
 
