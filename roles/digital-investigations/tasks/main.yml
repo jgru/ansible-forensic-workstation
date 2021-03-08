@@ -31,9 +31,6 @@
     state: touch
     mode: u=rwx,g=rx,o=r
 
-#- name: Make /usr/local/bin/sherlock executable
-#  file: dest=/usr/local/bin/sherlock mode=a+x
-
 - name: add block of lines to a file.
   blockinfile:
     path: /usr/local/bin/sherlock
