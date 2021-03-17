@@ -12,14 +12,14 @@ Then you might edit ~playbook/playbook.yml~ to include or exclude certain roles.
 ├── playbook
 └── roles
     ├── base
-    ├── disk-forensics
-    ├── docker
+    ├── python
+    ├── shell-environment
+    |── docker
     ├── emacs
+    ├── disk-forensics
     ├── malware-forensics
     ├── network-forensics
-    ├── office
-    ├── python
-    └── shell-environment
+    └── office
 #+end_src
 
 ** Using the playbook
@@ -32,7 +32,12 @@ pip3 install ansible
 Furtheron check, that the box to configure is reachable via SSH without a password prompt (use ~ssh-copy-id~ to transfer your keys, if not)
 
 **** How to run the playbook
-After modifying the ~hosts~ file run the playbook to provision a box
+After modifying the ~hosts~ file run the playbook to provision a box with the following command:
 #+BEGIN_SRC sh
 ansible-playbook -i inventory/hosts playbook/playbook.yml --ask-become-pass -vvv
+#+END_SRC
+
+If you do not care about supplying the sudo-password in cleartext or delete it afterwards anyway, use:
+#+BEGIN_SRC sh
+ansible-playbook -i inventory/hosts playbook/playbook.yml --extra-vars "ansible_become_pass=super_secret"
 #+END_SRC
