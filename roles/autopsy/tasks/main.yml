@@ -14,6 +14,7 @@
        - libbfio-dev
        - libc3p0-java
        - libewf-dev
+       - testdisk  # photorec dependency
   become: yes
 
 # Add apt signing key for bellsoft packaged OpenJDK with Open JFX
