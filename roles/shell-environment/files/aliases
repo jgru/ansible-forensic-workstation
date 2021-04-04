@@ -1,0 +1,29 @@
+# Navigation
+alias ..='cd ..'
+alias c='clear'
+alias h='history'
+
+# Basic file handling
+alias la='ls -a'
+alias ll='ls -lah'
+alias lla='ls -l -d $PWD/*'  # Shows full file paths
+alias lsl='ls -lhFA | less'
+
+# Package management
+alias update='sudo apt update && sudo apt upgrade -y'
+
+# Networking
+alias curl_android='curl -A "Mozilla/5.0 (Android 11; Mobile; rv:68.0) Gecko/68.0 Firefox/86.0"'
+alias curl_edge='curl -A "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36 Edg/89.0.774.50"'
+alias curl_ios='curl -A "Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) FxiOS/33.0 Mobile/15E148 Safari/605.1.15"'
+alias getip='dig +short myip.opendns.com @resolver1.opendns.com'
+
+# Get headers only
+alias header='curl -I'
+
+# Make ping more responsive
+alias pings='ping -c 3 -s.2'
+
+# Utils
+alias te='emacs -nw'
+alias now='date +"%T"'

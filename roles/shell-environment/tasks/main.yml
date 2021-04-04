@@ -20,29 +20,24 @@
   when: installation is success
   register: cloning
 
-- name: Creating new ~/.zshrc
-  copy:
-    src=zshrc
-    dest=/home/{{ ansible_user}}/.zshrc
-  when: cloning is success
-
 - name: Cloning zsh-autosuggestions
   git:
     repo=https://github.com/zsh-users/zsh-autosuggestions
     dest={{ OMZSH_CUSTOM }}/plugins/zsh-autosuggestions
   when: installation is success
-  register: cloning
+
+- name: Upload aliases
+  copy:
+    src=aliases
+    dest=/home/{{ ansible_user}}/.aliases
+
+- name: Upload zshrc
+  copy:
+    src=zshrc
+    dest=/home/{{ ansible_user}}/.zshrc
+  when: cloning is success
 
 - name: Upload .tmux.conf
   copy:
     src=tmux.conf
     dest=/home/{{ ansible_user }}/.tmux.conf
-  when: cloning is success
-
-  #- name: Backing up existing ~/.zshrc
-   #  shell: if [ -f /home/{{ ansible_user }}/.zshrc ]; then mv /home/{{ ansible_user }}/.zshrc{,.orig}; fi
-   #  when: installation|success
-   #  sudo: no
-
-   #- name: Copy sample config from git repo to local
-#  copy: remote_src=True src={{ OMZSH_DIR }}/templates/zshrc.zsh-template dest=/home/{{ ansible_user }}/.zshrc
