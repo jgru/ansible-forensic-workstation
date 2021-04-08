@@ -46,11 +46,17 @@
     path: "/usr/lib/jvm/bellsoft-java8-full-amd64/bin/java"
     link: "/usr/bin/java"
 
-- name: set java home as environment variable
+- name: Set $JAVA_HOME as environment variable for bash
   lineinfile:
     insertafter: EOF
-    path: "/etc/environment"
-    line: "JAVA_HOME=/usr/lib/jvm/bellsoft-java8-full-amd64"
+    path: "/home/{{ ansible_user }}/.bashrc"
+    line: "export JAVA_HOME='/usr/lib/jvm/bellsoft-java8-full-amd64'"
+
+- name: Set $JAVA_HOME as environment variable for zsh
+  lineinfile:
+    insertafter: EOF
+    path: "/home/{{ ansible_user }}/.zshrc"
+    line: "export JAVA_HOME='/usr/lib/jvm/bellsoft-java8-full-amd64'"
 
 - name: Install Sleuthkit with Java bindings - sleuthkit-java.deb
   apt:
@@ -71,10 +77,13 @@
     mode: "0755"
 
 - name: Execute setup script unix_setup.sh
-  shell: sh /opt/autopsy-{{ autopsy_version }}/unix_setup.sh
+  shell: bash /opt/autopsy-{{ autopsy_version }}/unix_setup.sh
+  # Specify environment variable explicitly, because .bashrc is not read at that time
+  environment:
+    JAVA_HOME: /usr/lib/jvm/bellsoft-java8-full-amd64
   args:
     chdir: /opt/autopsy-{{ autopsy_version }}
-
+  
 - name: Recursively change ownership of a directory
   file:
     path: /opt/autopsy-{{ autopsy_version }}
