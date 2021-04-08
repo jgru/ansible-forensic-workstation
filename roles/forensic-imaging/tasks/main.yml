@@ -33,3 +33,21 @@
        - usbutils
        - xmount
   become: yes
+
+- name: Install pyaff4
+  pip:
+    name: pyaff4
+    executable: pip3
+
+- name: Download aff4.py logical imager
+  get_url:
+    url: https://raw.githubusercontent.com/aff4/pyaff4/master/aff4.py
+    dest: /usr/local/bin/aff4
+    mode: '0775'
+
+- name: Ensure shebang exists in aff4.py
+  ansible.builtin.lineinfile:
+    path: /usr/local/bin/aff4
+    insertbefore: BOF
+    line: "#!/usr/bin/python3"
+    state: present
