@@ -1,16 +1,33 @@
 ---
+- name: Install disk/image inspection tools
+  apt:
+    pkg: 
+      - disktype
+      - gdisk
+    become: yes
+ 
+- name: Install file system drivers and utils
+  apt:
+    pkg:
+       - ntfs-3g # ntfs support
+       - exfat-fuse
+       - exfat-utils
+       - zfs-fuse
+  become: yes
 
 - name: Install carving and data recovery utilities
   apt:
     pkg:
        - foremost
        - scalpel # tsk's carver
-       - ext4magic # recover ext3 and ext4 files
-       - extundelete # recover deleted files from ext journal
-       - ntfs-3g # ntfs
-       - scrounge-ntfs # rescue data from corrupted NTFS partitions
+       - ntfs-3g # ntfs support
+       - exfat-fuse
+       - exfat-utils
        - testdisk  # contains photorec also
-  become: yes
+       - ddrutility # compliment to gnuddrescue, special ntfs utils
+       - diskscan # scan storage media for near failure sectors
+
+  become: yes 
 
 - name: Kessler parser import
   include: ./kessler_parser.yml
@@ -21,6 +38,16 @@
        - sleuthkit
   become: yes
 
+- name: Install additional FS tooling
+  apt:
+    pkg:
+       - fatcat
+       - ext4magic # recover ext3 and ext4 files
+       - extundelete # recover deleted files from ext journal
+       - scrounge-ntfs # rescue data from corrupted NTFS partitions
+       - mac-robber # collects data about allocated files in mounted filesystems
+  become: yes
+  
 - name: Install hashing utils
   apt:
     pkg:
@@ -35,8 +62,14 @@
     pkg:
        - binwalk
        - p7zip-full  # 7zip
+       - xxd 
        - shed # Hex viewer
        - sqlitebrowser
        - mpack # unpacking of .emls
+       - mboxgrep # grep throug .mbox
+       - mblaze # deal with maildir 
        - pcre2-utils # perl compatible grep syntax (pcre2grep...)
+       - exiftags
+       - exif
+       - archivemount # mount archive as FS
   become: yes
