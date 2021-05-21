@@ -13,6 +13,7 @@
        - exfat-fuse
        - exfat-utils
        - zfs-fuse
+       - wipefs # for wiping
   become: yes
 
 - name: Install carving and data recovery utilities
