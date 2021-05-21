@@ -13,6 +13,7 @@
        - exfat-fuse
        - exfat-utils
        - zfs-fuse
+       - zfsutils-linux
        - wipefs # for wiping
   become: yes
 
