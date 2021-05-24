@@ -35,7 +35,8 @@
   tags: packages, emacs
 
 - name: Configure emacs 26.3
-  shell: ./configure chdir=/tmp/emacs-26.3
+  shell: ./configure 
+    chdir: /tmp/emacs-26.3
   tags: packages, emacs
   when: emacs_result.stat.exists == False
 
