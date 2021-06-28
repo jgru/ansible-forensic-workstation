@@ -2,10 +2,10 @@
 - name: Update and upgrade apt packages
   become: yes
   apt:
-    upgrade: False
+    upgrade: no
     update_cache: yes
 
-- name: Install imaging tools
+- name: Install network exploration tools
   apt:
     pkg:
        - geoip-bin
@@ -14,29 +14,62 @@
        - nmap
   become: yes
 
-- name: Clone Sherlock repo
+- name: Clone dfir scripts repo
+  git:
+    repo: https://github.com/dfir-scripts/shellscripts
+    dest: /usr/local/share/dfir-scripts
+    force: yes
+
+- name: Find all files in ~/commands
+  find:
+    paths: /usr/local/share/dfir-scripts
+    patterns: "*.sh"
+  register: find
+
+- name: Make dfir-scripts executable
+  become: yes
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode:  "0755"
+    state: touch
+  with_items: "{{ find.files }}"
+
+
+- name: Create symlinks in /usr/local/bin for dfir-scripts
+  become: yes
+  file:
+    src: "{{ item.path }}"
+    dest: "/usr/local/bin/{{ (item.path | basename | splitext)[0] }}"
+    state: link
+    owner: "{{ ansible_user }}"
+    mode: "0755"
+  with_items: "{{ find.files }}"
+
+- name: Clone Sherlock repo for SOCMINT
   git:
     repo: https://github.com/sherlock-project/sherlock.git
-    dest: /usr/local/src/sherlock
+    dest: /usr/local/share/sherlock
     force: yes
 
 - name: Install requirements for Sherlock
   pip:
-    requirements: /usr/local/src/sherlock/requirements.txt
-    #virtualenv: /usr/local/src/sherlock/venv/
+    requirements: /usr/local/share/sherlock/requirements.txt
+    #virtualenv: /usr/local/share/sherlock/venv/
 
-- name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
-  ansible.builtin.file:
+- name: Create sherlock-file in /usr/local/bin
+  file:
     path: /usr/local/bin/sherlock
     state: touch
-    mode: u=rwx,g=rx,o=r
+    mode: "0755"
 
 - name: add block of lines to a file.
   blockinfile:
     path: /usr/local/bin/sherlock
     block: |
       #!/bin/bash
-      python3 /usr/local/src/sherlock/sherlock/sherlock.py "$@"
+      python3 /usr/local/share/sherlock/sherlock/sherlock.py "$@"
 
 - name: Make /usr/local/bin/sherlock executable
   file: dest=/usr/local/bin/sherlock mode=a+x
