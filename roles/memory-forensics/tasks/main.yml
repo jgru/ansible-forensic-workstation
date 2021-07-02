@@ -1,0 +1,17 @@
+---
+
+- name: Install volatility3
+  include: volatility3.yml
+
+- name: Install swap_digger
+  get_url:
+    url: https://raw.githubusercontent.com/sevagas/swap_digger/master/swap_digger.sh
+    dest: /usr/local/bin/swap_digger
+  become: yes
+
+- name: Set permissions for swap_digger
+  file:
+    path: /usr/local/bin/swap_digger
+    state: touch
+    mode: "0755"
+  become: yes

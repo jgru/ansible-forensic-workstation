@@ -1,0 +1,59 @@
+---
+
+# Get volatility3's code
+- name: Clone volatility3 repo
+  git:
+    repo: "{{ volatility3_repo }}"
+    dest: "{{ build_dir }}"
+    update: yes
+  become: yes # needed for write permissions on build dir
+
+- name: Call build to install dependencies volatility3
+  become: yes
+  become_method: sudo
+  command: "python3 setup.py build"
+  args:
+    chdir: "{{ build_dir }}"
+
+- name: Download Windows debug symbols (PDB files)
+  get_url:
+    url: https://downloads.volatilityfoundation.org/volatility3/symbols/windows.zip
+    dest: /tmp/windows.zip
+    checksum: sha256:231d69735b9a5482b16bdbf1ec356e0a95574c44079e68dfb02ebddb34d55f3e
+    timeout: 1500
+
+- name: Extract Windows debug symbols
+  unarchive:
+    src: /tmp/windows.zip
+    dest: "{{ build_dir }}/volatility3/symbols"
+    remote_src: yes
+  become: yes
+  become_method: sudo
+
+- name: Download Linux debug symbols
+  get_url:
+    url: https://downloads.volatilityfoundation.org/volatility3/symbols/linux.zip
+    dest: /tmp/linux.zip
+    checksum: sha256:d9d03616858c8247d62921656c1238e54daa7aa024c1b496ec624fd90c6231e2
+    timeout: 1500
+
+- name: Extract Linux debug symbols
+  unarchive:
+    src: /tmp/linux.zip
+    dest: "{{ build_dir }}/volatility3/symbols/"
+    remote_src: yes
+  become: yes
+  become_method: sudo
+
+- name: Link vol.py-file in /usr/local/bin
+  file:
+    path: /usr/local/bin/vol
+    state: touch
+    mode: "0755"
+
+- name: add block of lines to a file.
+  blockinfile:
+    path: /usr/local/bin/vol
+    block: |
+      #!/bin/bash
+      python3 {{ build_dir }}/vol.py "$@"

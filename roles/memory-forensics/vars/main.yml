@@ -1,0 +1,2 @@
+volatility3_repo: https://github.com/volatilityfoundation/volatility3.git
+build_dir: /usr/local/src/volatility3
