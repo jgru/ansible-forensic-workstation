@@ -1,11 +1,11 @@
 ---
 - name: Install disk/image inspection tools
   apt:
-    pkg: 
+    pkg:
       - disktype
       - gdisk
-    become: yes
- 
+  become: yes
+
 - name: Install file system drivers and utils
   apt:
     pkg:
@@ -28,8 +28,7 @@
        - testdisk  # contains photorec also
        - ddrutility # compliment to gnuddrescue, special ntfs utils
        - diskscan # scan storage media for near failure sectors
-
-  become: yes 
+  become: yes
 
 - name: Kessler parser import
   include: ./kessler_parser.yml
@@ -49,14 +48,11 @@
        - scrounge-ntfs # rescue data from corrupted NTFS partitions
        - mac-robber # collects data about allocated files in mounted filesystems
   become: yes
-  
-- name: Install hashing utils
+
+- name: Install hashing util
   apt:
     pkg:
        - hashrat # directory, recursive hashing
-       - hashdeep # fuzzy hashing
-       - rhash # wide range of hashsum
-       - ssdeep # content aware
   become: yes
 
 - name: Install content utils
@@ -64,12 +60,13 @@
     pkg:
        - binwalk
        - p7zip-full  # 7zip
-       - xxd 
+       - xxd
        - shed # Hex viewer
        - sqlitebrowser
        - mpack # unpacking of .emls
+       - extract-msg
        - mboxgrep # grep throug .mbox
-       - mblaze # deal with maildir 
+       - mblaze # deal with maildir
        - pcre2-utils # perl compatible grep syntax (pcre2grep...)
        - exiftags
        - exif
