@@ -19,5 +19,6 @@
     - filesystem-forensics
     - win-artifact-forensics
     - autopsy
+    - memory-forensics
     - network-forensics
-    - malware-forensics
+    - malware-analysis
