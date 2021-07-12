@@ -45,13 +45,13 @@
   become: yes
   become_method: sudo
 
-- name: Link vol.py-file in /usr/local/bin
+- name: Create /usr/local/bin/vol
   file:
     path: /usr/local/bin/vol
     state: touch
     mode: "0755"
 
-- name: add block of lines to a file.
+- name: Fill /usr/local/bin/vol to call vol.py
   blockinfile:
     path: /usr/local/bin/vol
     block: |

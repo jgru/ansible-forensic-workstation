@@ -15,3 +15,10 @@
     state: touch
     mode: "0755"
   become: yes
+
+- name: Install forensics packages
+  apt:
+    pkg:
+    - aeskeyfind
+    - rsakeyfind
+  become: yes
