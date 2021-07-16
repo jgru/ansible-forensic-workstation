@@ -104,3 +104,7 @@ bindkey -e
 # Set SSLKEYLOGFILE for decrypting TLS
 export SSLKEYLOGFILE=~/.sslkeylog
 
+# Setup emacsclient, ensure that emacs is installed
+export ALTERNATE_EDITOR=""
+export EDITOR="emacsclient -t"                  # $EDITOR opens in terminal
+export VISUAL="emacsclient -c -a emacs"         # $VISUAL opens in GUI mode
