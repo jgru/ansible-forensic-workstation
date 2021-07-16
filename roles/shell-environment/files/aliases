@@ -25,5 +25,4 @@ alias header='curl -I'
 alias pings='ping -c 3 -s.2'
 
 # Utils
-alias te='emacs -nw'
 alias now='date +"%T"'
