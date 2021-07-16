@@ -26,3 +26,4 @@ alias pings='ping -c 3 -s.2'
 
 # Utils
 alias now='date +"%T"'
+alias te="emacsclient -t"
