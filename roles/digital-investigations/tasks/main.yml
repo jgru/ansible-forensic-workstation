@@ -14,7 +14,7 @@
        - nmap
   become: yes
 
-- name: Clone dfir scripts repo
+- name: Clone helpful dfir scripts repo
   git:
     repo: https://github.com/dfir-scripts/shellscripts
     dest: /usr/local/share/dfir-scripts
@@ -35,7 +35,6 @@
     mode:  "0755"
     state: touch
   with_items: "{{ find.files }}"
-
 
 - name: Create symlinks in /usr/local/bin for dfir-scripts
   become: yes
