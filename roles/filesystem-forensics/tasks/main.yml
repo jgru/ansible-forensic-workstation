@@ -65,6 +65,7 @@
        - sqlitebrowser
        - mpack # unpacking of .emls
        - extract-msg
+       - catdoc # convert MS-Word file to plaintext
        - mboxgrep # grep throug .mbox
        - mblaze # deal with maildir
        - pcre2-utils # perl compatible grep syntax (pcre2grep...)
