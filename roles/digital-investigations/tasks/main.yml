@@ -5,13 +5,13 @@
     upgrade: no
     update_cache: yes
 
-
 - name: Install log parsing tools
   apt:
     pkg:
        - coreutils # all the core Unix goodess!
        - parallel # process standard input in parallel
        - csvkit # whole bunch of tools for working with csv
+       - xls2csv # if xls are provided
        - jq # Work with JSON
        - python3-evtx # evtx_dump, ...
   become: yes
