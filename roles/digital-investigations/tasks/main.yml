@@ -5,6 +5,17 @@
     upgrade: no
     update_cache: yes
 
+
+- name: Install log parsing tools
+  apt:
+    pkg:
+       - coreutils # all the core Unix goodess!
+       - parallel # process standard input in parallel
+       - csvkit # whole bunch of tools for working with csv
+       - jq # Work with JSON
+       - python3-evtx # evtx_dump, ...
+  become: yes
+
 - name: Install network exploration tools
   apt:
     pkg:
@@ -45,30 +56,3 @@
     owner: "{{ ansible_user }}"
     mode: "0755"
   with_items: "{{ find.files }}"
-
-- name: Clone Sherlock repo for SOCMINT
-  git:
-    repo: https://github.com/sherlock-project/sherlock.git
-    dest: /usr/local/share/sherlock
-    force: yes
-
-- name: Install requirements for Sherlock
-  pip:
-    requirements: /usr/local/share/sherlock/requirements.txt
-    #virtualenv: /usr/local/share/sherlock/venv/
-
-- name: Create sherlock-file in /usr/local/bin
-  file:
-    path: /usr/local/bin/sherlock
-    state: touch
-    mode: "0755"
-
-- name: add block of lines to a file.
-  blockinfile:
-    path: /usr/local/bin/sherlock
-    block: |
-      #!/bin/bash
-      python3 /usr/local/share/sherlock/sherlock/sherlock.py "$@"
-
-- name: Make /usr/local/bin/sherlock executable
-  file: dest=/usr/local/bin/sherlock mode=a+x
