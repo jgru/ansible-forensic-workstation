@@ -1,0 +1,29 @@
+---
+- name: Install colorama (needed by prisma)
+  pip:
+    name:
+    - colorama
+    executable: pip3
+
+- name: Clone prisma - CL colorize
+  git:
+    repo: https://github.com/Neo23x0/prisma.git
+    dest: /usr/local/src/prisma
+    force: yes
+  become: yes
+
+- name: Ensures /usr/local/bin/ exists
+  file:
+    path: /usr/local/bin/
+    state: directory
+  become: yes
+
+- name: Copy prisma.py to /usr/local/bin
+  copy:
+    src: /usr/local/src/prisma/prisma.py
+    dest: /usr/local/bin/prisma
+    remote_src: yes
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+  become: yes
