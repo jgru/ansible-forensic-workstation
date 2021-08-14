@@ -26,6 +26,12 @@
     dest={{ OMZSH_CUSTOM }}/plugins/zsh-autosuggestions
   when: installation is success
 
+- name: Cloning zsh-syntax-highlighting
+  git:
+    repo=https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest={{ OMZSH_CUSTOM }}/plugins/zsh-syntax-highlighting
+  when: installation is success
+
 - name: Upload aliases
   copy:
     src=aliases
@@ -41,3 +47,6 @@
   copy:
     src=tmux.conf
     dest=/home/{{ ansible_user }}/.tmux.conf
+
+- name: Include helper tools
+  include: shell_helpers.yml
