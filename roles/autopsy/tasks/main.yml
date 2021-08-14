@@ -17,7 +17,7 @@
        - testdisk  # photorec dependency
   become: yes
 
-# Add apt signing key for bellsoft packaged OpenJDK with Open JFX
+#Add apt signing key for bellsoft packaged OpenJDK with Open JFX
 - name: Add an apt signing key to a specific keyring file
   apt_key:
     url: https://download.bell-sw.com/pki/GPG-KEY-bellsoft
@@ -83,7 +83,7 @@
     JAVA_HOME: /usr/lib/jvm/bellsoft-java8-full-amd64
   args:
     chdir: /opt/autopsy-{{ autopsy_version }}
-  
+
 - name: Recursively change ownership of a directory
   file:
     path: /opt/autopsy-{{ autopsy_version }}
@@ -93,10 +93,18 @@
     group: "{{ ansible_user }}"
 
 - name: Create symbolic link to run autopsy
+  become: yes
   file:
-    src: "/opt/autopsy-{{ autopsy_version }}/bin/autopsy"
     path: "/usr/local/bin/autopsy"
-    state: link
     owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    state: touch
+    mode: 0755
 
-# Incorporate some of those roles/office/tasks/
+- name: Create wrapper to run autopsy
+  become: yes
+  blockinfile:
+    path: /usr/local/bin/autopsy
+    block: |
+      #!/bin/bash
+      /opt/autopsy-{{ autopsy_version }}/bin/autopsy --nosplash
