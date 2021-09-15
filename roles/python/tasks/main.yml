@@ -8,11 +8,3 @@
   become: yes
   tags:
     - python3
-
-
-- name: Install jupyter
-  pip:
-    name:
-    - jupyterlab
-    - notebook
-    executable: pip3
