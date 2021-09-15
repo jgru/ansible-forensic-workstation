@@ -5,30 +5,38 @@
   tags: packages, emacs
   register: emacs_result
 
-- name: Update apt-cache
-  apt: update_cache=yes
-  tags: packages, python
-  when: emacs_result.stat.exists == False
-
-- name: Install packages needed for compiling
-  apt: pkg={{ item }}
-  with_items:
-    - emacs-gtk
-    - ccls # for Language Server Protocol for C/C++
+- name: Remove old .emacs.d
+  file:
+    path: /home/{{ ansible_user }}/.emacs.d
+    state: absent
+  become: yes
+  when: emacs_result.stat.exists == True
+  
+- name: Install emacs package
+  apt: 
+    pkg:
+      - emacs-gtk
+      - ripgrep
+      - fd-find
+      - ccls # for Language Server Protocol for C/C++
   tags: packages, emacs
-  when: emacs_result.stat.exists == False
 
-- name: Cloning doom-emacs
+- name: Clone doom-emacs
   git:
-    repo=https://github.com/hlissner/doom-emacs
-    dest=/home/{{ ANSIBLE_USER }}/.emacs.d
-    depth=1
+    repo: https://github.com/hlissner/doom-emacs
+    dest: /home/{{ ansible_user }}/.emacs.d
+    depth: 1
+    force: yes
 
-- name: Add doom commands to $PATH 
-  copy:
-    dest: /home/{{ ANSIBLE_USER }}/.emacs.d/bin/
-    content: 'PATH=$PATH:{{ my_custom_path_var }}'
-    
+- name: Change permisions of .emacs.d
+  file:
+    path: /home/{{ ansible_user }}/.emacs.d
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    recurse: yes
+  become: yes
+
 - name: Install additional packages 
   pip:
     name:
