@@ -17,6 +17,9 @@
       - sane-utils
       - libsane
       - img2pdf # for actual scanning
+      - tesseract-ocr
+      - tesseract-ocr-deu
+      - imagemagick
 
 - name: Install adf2pdf
   pip:
