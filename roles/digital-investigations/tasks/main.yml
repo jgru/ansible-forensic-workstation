@@ -16,6 +16,11 @@
        - python3-evtx # evtx_dump, ...
   become: yes
 
+- name: Install timestamp decoder
+  pip:
+    name: time_decode
+    executable: pip3
+
 - name: Install network exploration tools
   apt:
     pkg:
