@@ -9,6 +9,10 @@
   apt: 
     pkg:
       - thunderbird 
+- name: Install gimp
+  apt:
+    pkg:
+      - gimp
 
 - name: Install scanning drivers and utils
   apt:
