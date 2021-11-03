@@ -35,3 +35,5 @@
       - bat # cat clone with syntax highlighting
       - exa # ls replacement
       - jq  # for handling JSON
+      - htop
+      - rsync
