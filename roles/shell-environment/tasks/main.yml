@@ -37,7 +37,7 @@
     src: aliases
     dest: /home/{{ ansible_user}}/.aliases
 
-- name: Tempalte and upload zshrc
+- name: Upload .zshrc-template
   template:
     src: zshrc.j2
     dest: /home/{{ ansible_user}}/.zshrc
