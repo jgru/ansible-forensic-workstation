@@ -37,3 +37,4 @@
       - jq  # for handling JSON
       - htop
       - rsync
+      - fzf # fuzzy matching
