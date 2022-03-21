@@ -78,5 +78,8 @@
       - libxapian-dev
       - pandoc
       - cmake
+      - libvterm0
+      - libvterm-dev
+      - libvterm-bin
   tags: packages, emacs
   when: emacs_result.stat.exists == False
