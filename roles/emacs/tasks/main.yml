@@ -6,85 +6,85 @@
   register: emacs_result
 
 - name: Update apt-cache
-  apt: update_cache=yes
-  tags: packages, python
-  when: emacs_result.stat.exists == False
-
-- name: Install packages needed for compiling
-  apt: pkg={{ item }}
-  with_items:
-    - build-essential
-    - texinfo
-    - libx11-dev
-    - libxpm-dev
-    - libjpeg-dev
-    - libpng-dev
-    - libgif-dev
-    - libtiff-dev
-    - libgtk-3-dev
-    - libncurses-dev
-    - libgnutls28-dev
-  tags: packages, emacs
-  when: emacs_result.stat.exists == False
-
-- name: Extract emacs 26.3 into /tmp
-  unarchive:
-    src: https://ftp.gnu.org/pub/gnu/emacs/emacs-26.3.tar.gz
-    dest: /tmp/
-    remote_src: yes
-  tags: packages, emacs
-
-- name: Configure emacs 26.3
-  shell: ./configure 
-    chdir: /tmp/emacs-26.3
-  tags: packages, emacs
-  when: emacs_result.stat.exists == False
-
-- name: Make
-  shell: make chdir=/tmp/emacs-26.3
-  tags: packages, emacs
-  when: emacs_result.stat.exists == False
-
-- name: Install emacs 26.3
-  shell: make install chdir=/tmp/emacs-26.3
   become: yes
-  become_user: root
+  apt: update_cache=yes
+  when: emacs_result.stat.exists == False
+
+- name: Install emacs from package archives
+  become: yes
+  apt:
+    pkg:
+      - emacs
   tags: packages, emacs
   when: emacs_result.stat.exists == False
 
-- name: Remove tmp files used for emacs installation
-  file: path={{ item }} state=absent
-  with_items:
-    - /tmp/emacs-26.3.tar.gz
-    - /tmp/emacs-26.3
-  tags: packages, emacs
-  when: emacs_result.stat.exists == False
-
-- name: Create .emacs.d directory, if it does not exist
-  file:
-    path: /home/{{ ansible_user }}/.emacs.d
+- name: Recursively change ownership of /usr/local/src
+  ansible.builtin.file:
+    path: /usr/local/src
     state: directory
-    owner: '{{ ansible_user }}'
-    mode: '0755'
+    recurse: yes
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    
+- name: Clone emacs repo
+  become: yes
+  become_user: "{{ ansible_user }}"
+  git:
+    repo: git://git.savannah.gnu.org/emacs.git
+    dest: /usr/local/src/emacs
+    depth: 1
+    update: yes
+    version: master
 
-- name: Upload init.el
-  copy:
-    src: init.el
-    dest: '/home/{{ ansible_user }}/.emacs.d/init.el'
+- name: Install dependencies for emacs compilation
+  become: yes
+  apt:
+    pkg:
+      - stow
+      - build-essential
+      - libx11-dev
+      - xaw3dg-dev
+      - libjpeg-dev
+      - libpng-dev
+      - libgif-dev
+      - libtiff-dev
+      - libncurses5-dev
+      - libxft-dev
+      - librsvg2-dev
+      - libmagickcore-dev
+      - libmagick++-dev
+      - libxml2-dev
+      - libgpm-dev
+      - libotf-dev
+      - libm17n-dev
+      - libgconf2-dev
+      - libgnutls28-dev
+      - libjansson4
+      - libjansson-dev
+      - libgtk-3-dev
+      - libwebkit2gtk-4.0-dev
+      - libgccjit-10-dev
+      - texinfo
+  tags: packages, emacs
+  when: emacs_result.stat.exists == False
 
-- name: Install python package of yara
-  pip:
-    name:
-    - rope
-    - elpy
-    - jedi
-    - importmagic
-    - autopep8
-    - flake8
+- name: Compile emacs
+  become: yes
+  ansible.builtin.shell:
+    cmd: export CC=/usr/bin/gcc-10 CXX=/usr/bin/gcc-10 && ./autogen.sh && ./configure --with-mailutils --with-json --with-x-toolkit=gtk3 --with-xwidgets --with-modules --with-native-compilation --with-gnutls --with-jpeg --with-png --with-rsvg --with-tiff --with-wide-int --with-xft --with-xml2 --with-xpm && make -j16 && make install
+    chdir: /usr/local/src/emacs
 
-- name: run init file
-  command: 'emacs --script init.el'
-  args:
-    chdir: '/home/{{ ansible_user }}/.emacs.d'  # Change into this directory before running the command
-    removes: 'init.el' # When init.el not exist, don't run command
-
+- name: Install dependencies for emacs operation from package archives
+  become: yes
+  apt:
+    pkg:
+      - find
+      - ripgrep
+      - mu4e
+      - isync
+      - libgmime-3.0-dev
+      - libxapian-dev
+      - pandoc
+      - cmake
+  tags: packages, emacs
+  when: emacs_result.stat.exists == False
