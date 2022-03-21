@@ -5,10 +5,10 @@
      - build-essential
      - acl
      - ntp
-     - htop
      - git
      - supervisor
      - cifs-utils
+     - libnotify-bin
   become: yes
   tags:
     - packages

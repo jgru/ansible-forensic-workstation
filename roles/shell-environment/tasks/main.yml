@@ -8,45 +8,50 @@
     - powerline
   register: installation
 
-- name: set default shell for user
+- name: Set default shell for user
   user:
-    name: '{{ ansible_user }}'
+    name: "{{ ansible_user }}"
     shell: /bin/zsh
 
 - name: Cloning oh-my-zsh
   git:
-    repo=https://github.com/robbyrussell/oh-my-zsh
-    dest={{ OMZSH_DIR }}
+    repo: https://github.com/robbyrussell/oh-my-zsh
+    dest: "{{ OMZSH_DIR }}"
   when: installation is success
   register: cloning
 
 - name: Cloning zsh-autosuggestions
   git:
-    repo=https://github.com/zsh-users/zsh-autosuggestions
-    dest={{ OMZSH_CUSTOM }}/plugins/zsh-autosuggestions
+    repo: https://github.com/zsh-users/zsh-autosuggestions
+    dest: "{{ OMZSH_CUSTOM }}/plugins/zsh-autosuggestions"
   when: installation is success
 
 - name: Cloning zsh-syntax-highlighting
   git:
-    repo=https://github.com/zsh-users/zsh-syntax-highlighting.git
-    dest={{ OMZSH_CUSTOM }}/plugins/zsh-syntax-highlighting
+    repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+    dest: "{{ OMZSH_CUSTOM }}/plugins/zsh-syntax-highlighting"
   when: installation is success
 
 - name: Upload aliases
   copy:
-    src=aliases
-    dest=/home/{{ ansible_user}}/.aliases
+    src: aliases
+    dest: /home/{{ ansible_user}}/.aliases
 
-- name: Upload zshrc
-  copy:
-    src=zshrc
-    dest=/home/{{ ansible_user}}/.zshrc
+- name: Upload .zshrc-template
+  template:
+    src: zshrc.j2
+    dest: /home/{{ ansible_user}}/.zshrc
   when: cloning is success
+  
+ - name: Download zsh-interactive-cd.plugin.zsh
+  get_url:
+    url: https://github.com/changyuheng/zsh-interactive-cd/blob/master/zsh-interactive-cd.plugin.zsh
+    dest: /home/{{ ansible_user }}/.zsh-interactive-cd.plugin.zsh
 
 - name: Upload .tmux.conf
   copy:
-    src=tmux.conf
-    dest=/home/{{ ansible_user }}/.tmux.conf
+    src: tmux.conf
+    dest: /home/{{ ansible_user }}/.tmux.conf
 
 - name: Include helper tools
   include: shell_helpers.yml

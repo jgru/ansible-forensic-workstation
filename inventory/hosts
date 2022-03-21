@@ -1,7 +1,5 @@
 [target]
-#172.16.0.172
-#172.16.0.196
-192.168.178.114
+127.0.0.1
 
 [all:vars]
 ansible_connection=ssh

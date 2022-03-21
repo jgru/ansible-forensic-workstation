@@ -1,15 +1,45 @@
 ---
+- name: Install chromium
+  apt:
+    pkg:
+     - chromium
+     - chromium-l10n
+
+- name: Install thunderbird
+  apt: 
+    pkg:
+      - thunderbird 
+- name: Install gimp
+  apt:
+    pkg:
+      - gimp
+
+- name: Install scanning drivers and utils
+  apt:
+    pkg:
+      - sane
+      - sane-utils
+      - libsane
+      - img2pdf # for actual scanning
+      - tesseract-ocr
+      - tesseract-ocr-deu
+      - imagemagick
+
+- name: Install adf2pdf
+  pip:
+    name:
+      - adf2pdf
+    executable: pip3
+  become: yes  # scanner is accessible as root
+
 - name: Install latex
-  package: name={{ item }}
-  state: present
-  become: yes
-  with_items:
-    - texlive-full
-    - texlive-font-utils
-    - texlive-fonts-extra
-    - python-pygments
-    - biber
+  apt:
+    pkg: 
+      - texlive-full
+      - texlive-font-utils
+      - texlive-fonts-extra
+      - biber
 
 - name: Install Xmind
   apt:
-   deb: https://www.xmind.net/xmind/downloads/XMind-ZEN-for-Linux-amd-64bit-10.0.0-201911260056.deb
+   deb: https://dl3.xmind.net/XMind-for-Linux-amd-64bit-11.0.1-202106220606.deb

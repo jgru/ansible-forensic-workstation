@@ -27,3 +27,14 @@
     group: "{{ ansible_user }}"
     mode: "0755"
   become: yes
+
+- name: Install various helper tools
+  apt:
+    pkg:
+      - fd-find # replacement for find
+      - bat # cat clone with syntax highlighting
+      - exa # ls replacement
+      - jq  # for handling JSON
+      - htop
+      - rsync
+      - fzf # fuzzy matching

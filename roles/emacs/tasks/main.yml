@@ -2,20 +2,12 @@
 - name: Check, whether the /usr/bin/emacs exists
   stat:
     path: /usr/bin/emacs
-  tags: emacs
+  tags: packages, emacs
   register: emacs_result
 
 - name: Update apt-cache
   become: yes
   apt: update_cache=yes
-  when: emacs_result.stat.exists == False
-
-- name: Install emacs from package archives
-  become: yes
-  apt:
-    pkg:
-      - emacs
-  tags: packages, emacs
   when: emacs_result.stat.exists == False
 
 - name: Recursively change ownership of /usr/local/src
